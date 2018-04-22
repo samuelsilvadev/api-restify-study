@@ -10,7 +10,8 @@
   "author": "Samuel Silva",
   "license": "MIT",
   "dependencies": {
-    "restify": "7.1.1"
+    "restify": "7.1.1",
+    "restify-cors-middleware": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "4.19.1",
