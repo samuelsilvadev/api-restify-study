@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Samuel Silva",
   "license": "MIT",
+  "dependencies": {
+    "restify": "7.1.1"
+  },
   "devDependencies": {
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
-    "eslint-plugin-import": "2.11.0",
-    "restify": "7.1.1"
+    "eslint-plugin-import": "2.11.0"
   }
 }
