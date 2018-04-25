@@ -5,6 +5,7 @@ const cors = require('./../server/cors');
 
 server.pre(cors.preflight);
 server.use(cors.actual);
+server.use(restify.plugins.bodyParser());
 
 routes(server);
 
