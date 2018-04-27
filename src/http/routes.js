@@ -1,18 +1,35 @@
+const db = require('./../services/mysql');
+
 const routes = (server) => {
 	server.get('/', (req, resp, next) => {
 		resp.send('working...');
 		next();
 	});
 
-	server.get('/profile', (req, resp, next) => {
-		resp.send(['1', 'Samuel', 'samuelsilvadev.github.io', 'Fortaleza - CE']);
-		next();
+	server.get('/persons', (req, resp, next) => {
+		db.persons().all()
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
 	});
 
-	server.post('/profile', (req, resp, next) => {
-		const { name, website, place } = req.params;
-		resp.send({ name, website, place });
-		next();
+	server.post('/persons', (req, resp, next) => {
+		const { name } = 'Teste';
+		
+		db.persons().save(name)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
 	});
 };
 
