@@ -19,7 +19,7 @@ const routes = (server) => {
 	});
 
 	server.post('/persons', (req, resp, next) => {
-		const { name } = 'Teste';
+		const { name } = req.params;
 
 		db.persons().save(name)
 			.then((data) => {

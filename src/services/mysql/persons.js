@@ -8,7 +8,7 @@ const personsModule = (deps) => {
 					if (error) {
 						errorHandler(
 							error,
-							'Error to list  users',
+							'Error to list users',
 							reject,
 						);
 						return;
@@ -19,15 +19,24 @@ const personsModule = (deps) => {
 			});
 		},
 		save: (name) => {
-			const { connection } = deps;
+			const { connection, errorHandler } = deps;
+
+			if (!name) {
+				errorHandler(null, 'name is a required Parameter', (data) => console.error(data));
+				return Promise.reject();
+			}
 
 			return new Promise((reject, resolve) => {
-				connection.query(`INSERT INTO persons(personName) VALUES (${name});`, (error, results) => {
+				connection.query('INSERT INTO persons(personName) VALUES (?);', [name], (error, results) => {
 					if (error) {
-						reject(new Error(error));
+						errorHandler(
+							error,
+							'Error to save person',
+							reject,
+						);
 					}
 
-					resolve({ persons: results });
+					resolve({ person: { name: name, personID: results.insertId } });
 				});
 			});
 		},
