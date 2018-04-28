@@ -7,7 +7,12 @@ const connection = mysqlServer.createConnection({
 	database: 'profiles',
 });
 
-const personsModule = require('./persons')({ connection });
+const errorHandler = (error, msg, rejectFunction) => {
+	console.error(error);
+	rejectFunction({ error: msg });
+};
+
+const personsModule = require('./persons')({ connection, errorHandler });
 
 module.exports = {
 	persons: () => personsModule,

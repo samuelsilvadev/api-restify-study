@@ -20,7 +20,7 @@ const routes = (server) => {
 
 	server.post('/persons', (req, resp, next) => {
 		const { name } = 'Teste';
-		
+
 		db.persons().save(name)
 			.then((data) => {
 				resp.send(data);

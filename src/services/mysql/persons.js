@@ -2,11 +2,16 @@
 const personsModule = (deps) => {
 	return {
 		all: () => {
-			const { connection } = deps;
+			const { connection, errorHandler } = deps;
 			return new Promise((reject, resolve) => {
 				connection.query('SELECT * FROM persons;', (error, results) => {
 					if (error) {
-						reject(new Error(error));
+						errorHandler(
+							error,
+							'Error to list  users',
+							reject,
+						);
+						return;
 					}
 
 					resolve({ persons: results });
@@ -17,7 +22,7 @@ const personsModule = (deps) => {
 			const { connection } = deps;
 
 			return new Promise((reject, resolve) => {
-				connection.query(`INSERT INTO persons(name) VALUES (${name});`, (error, results) => {
+				connection.query(`INSERT INTO persons(personName) VALUES (${name});`, (error, results) => {
 					if (error) {
 						reject(new Error(error));
 					}
@@ -26,8 +31,8 @@ const personsModule = (deps) => {
 				});
 			});
 		},
-		update: (id, name) => {},
-		del: (id) => {},
+		update: (id, name) => { },
+		del: (id) => { },
 	};
 }
 
