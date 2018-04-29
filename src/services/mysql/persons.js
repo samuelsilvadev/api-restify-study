@@ -44,16 +44,16 @@ const personsModule = deps => (
 			const { connection, errorHandler } = deps;
 
 			return new Promise((resolve, reject) => {
-				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error) => {
-					if (error) {
+				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error, results) => {
+					if (error || !results.affectedRows) {
 						errorHandler(
 							error,
-							'Error to updata person',
+							'Error to update person',
 							reject,
 						);
 					}
 
-					resolve({ person: { name, personID: id } });
+					resolve({ person: { name, personID: id }, affectedRows: results.affectedRows });
 				});
 			});
 		},
@@ -61,8 +61,8 @@ const personsModule = deps => (
 			const { connection, errorHandler } = deps;
 
 			return new Promise((resolve, reject) => {
-				connection.query('DELETE FROM persons WHERE personID = ?;', [id], (error) => {
-					if (error) {
+				connection.query('DELETE FROM persons WHERE personID = ?;', [id], (error, results) => {
+					if (error || !results.affectedRows) {
 						errorHandler(
 							error,
 							'Error to delete a person',
@@ -70,7 +70,7 @@ const personsModule = deps => (
 						);
 					}
 
-					resolve({ message: 'Person removed successfully!' });
+					resolve({ message: 'Person removed successfully!', affectedRows: results.affectedRows });
 				});
 			});
 		},
