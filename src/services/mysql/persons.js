@@ -36,7 +36,7 @@ const personsModule = (deps) => {
 						);
 					}
 
-					resolve({ person: { name: name, personID: results.insertId } });
+					resolve({ person: { name, personID: results.insertId } });
 				});
 			});
 		},
@@ -44,7 +44,7 @@ const personsModule = (deps) => {
 			const { connection, errorHandler } = deps;
 
 			return new Promise((reject, resolve) => {
-				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error, results) => {
+				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error) => {
 					if (error) {
 						errorHandler(
 							error,
@@ -53,12 +53,28 @@ const personsModule = (deps) => {
 						);
 					}
 
-					resolve({ person: { name: name, personID: id } });
+					resolve({ person: { name, personID: id } });
 				});
 			});
 		},
-		del: (id) => { },
+		del: (id) => {
+			const { connection, errorHandler } = deps;
+
+			return new Promise((reject, resolve) => {
+				connection.query('DELETE FROM persons WHERE personID = ?;', [id], (error) => {
+					if (error) {
+						errorHandler(
+							error,
+							'Error to delete a person',
+							reject,
+						);
+					}
+
+					resolve({ message: 'Person removed successfully!' });
+				});
+			});
+		},
 	};
-}
+};
 
 module.exports = personsModule;

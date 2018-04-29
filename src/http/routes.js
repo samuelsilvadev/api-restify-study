@@ -34,8 +34,22 @@ const routes = (server) => {
 
 	server.put('/persons', (req, resp, next) => {
 		const { name, id } = req.params;
-		
+
 		db.persons().update(id, name)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
+
+	server.del('/persons', (req, resp, next) => {
+		const { id } = req.params;
+
+		db.persons().del(id)
 			.then((data) => {
 				resp.send(data);
 				next();
