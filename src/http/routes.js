@@ -31,6 +31,20 @@ const routes = (server) => {
 				next();
 			});
 	});
+
+	server.put('/persons', (req, resp, next) => {
+		const { name, id } = req.params;
+		
+		db.persons().update(id, name)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
 };
 
 module.exports = routes;

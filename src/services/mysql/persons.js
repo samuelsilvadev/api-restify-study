@@ -22,7 +22,7 @@ const personsModule = (deps) => {
 			const { connection, errorHandler } = deps;
 
 			if (!name) {
-				errorHandler(null, 'name is a required Parameter', (data) => console.error(data));
+				errorHandler(null, 'name is a required Parameter', (data) => { console.error(data); });
 				return Promise.reject();
 			}
 
@@ -40,7 +40,23 @@ const personsModule = (deps) => {
 				});
 			});
 		},
-		update: (id, name) => { },
+		update: (id, name) => {
+			const { connection, errorHandler } = deps;
+
+			return new Promise((reject, resolve) => {
+				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error, results) => {
+					if (error) {
+						errorHandler(
+							error,
+							'Error to updata person',
+							reject,
+						);
+					}
+
+					resolve({ person: { name: name, personID: id } });
+				});
+			});
+		},
 		del: (id) => { },
 	};
 }
