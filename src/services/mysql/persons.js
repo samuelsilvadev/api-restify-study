@@ -1,9 +1,10 @@
 
-const personsModule = (deps) => {
-	return {
+const personsModule = deps => (
+	({
 		all: () => {
 			const { connection, errorHandler } = deps;
-			return new Promise((reject, resolve) => {
+
+			return new Promise((resolve, reject) => {
 				connection.query('SELECT * FROM persons;', (error, results) => {
 					if (error) {
 						errorHandler(
@@ -21,12 +22,11 @@ const personsModule = (deps) => {
 		save: (name) => {
 			const { connection, errorHandler } = deps;
 
-			if (!name) {
-				errorHandler(null, 'name is a required Parameter', (data) => { console.error(data); });
-				return Promise.reject();
-			}
+			return new Promise((resolve, reject) => {
+				if (!name) {
+					errorHandler(new Error('Invalid paramters'), 'name is a required Parameter', reject);
+				}
 
-			return new Promise((reject, resolve) => {
 				connection.query('INSERT INTO persons(personName) VALUES (?);', [name], (error, results) => {
 					if (error) {
 						errorHandler(
@@ -43,7 +43,7 @@ const personsModule = (deps) => {
 		update: (id, name) => {
 			const { connection, errorHandler } = deps;
 
-			return new Promise((reject, resolve) => {
+			return new Promise((resolve, reject) => {
 				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error) => {
 					if (error) {
 						errorHandler(
@@ -60,7 +60,7 @@ const personsModule = (deps) => {
 		del: (id) => {
 			const { connection, errorHandler } = deps;
 
-			return new Promise((reject, resolve) => {
+			return new Promise((resolve, reject) => {
 				connection.query('DELETE FROM persons WHERE personID = ?;', [id], (error) => {
 					if (error) {
 						errorHandler(
@@ -74,7 +74,7 @@ const personsModule = (deps) => {
 				});
 			});
 		},
-	};
-};
+	})
+);
 
 module.exports = personsModule;
