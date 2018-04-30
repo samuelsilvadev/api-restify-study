@@ -24,7 +24,8 @@ const personsModule = deps => (
 
 			return new Promise((resolve, reject) => {
 				if (!name) {
-					errorHandler(new Error('Invalid paramters'), 'name is a required Parameter', reject);
+					errorHandler(new Error('name is a required Parameter'), 'name is a required Parameter', reject);
+					return;
 				}
 
 				connection.query('INSERT INTO persons(personName) VALUES (?);', [name], (error, results) => {
@@ -34,6 +35,7 @@ const personsModule = deps => (
 							'Error to save person',
 							reject,
 						);
+						return;
 					}
 
 					resolve({ person: { name, personID: results.insertId } });
@@ -51,6 +53,7 @@ const personsModule = deps => (
 							'Error to update person',
 							reject,
 						);
+						return;
 					}
 
 					resolve({ person: { name, personID: id }, affectedRows: results.affectedRows });
@@ -68,6 +71,7 @@ const personsModule = deps => (
 							'Error to delete a person',
 							reject,
 						);
+						return;
 					}
 
 					resolve({ message: 'Person removed successfully!', affectedRows: results.affectedRows });
