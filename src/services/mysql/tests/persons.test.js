@@ -1,20 +1,14 @@
-require('dotenv').config();
 const test = require('ava');
-const mysqlServer = require('mysql');
-
-const connection = mysqlServer.createConnection({
-	host: process.env.MYSQL_HOST,
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD,
-	database: process.env.MYSQL_DATABASE_TEST,
-});
-
-const errorHandler = (error, msg, rejectFunction) => {
-	console.error(error);
-	rejectFunction({ error: msg });
-};
+const { connection, errorHandler } = require('./setup');
 
 const personsModule = require('./../persons')({ connection, errorHandler });
+
+function _clearPersonTable() {
+	return connection.query('TRUNCATE TABLE persons');
+}
+
+test.beforeEach(() => _clearPersonTable());
+test.after.always(() => _clearPersonTable());
 
 test('create person', async (t) => {
 	const result = await personsModule.save('samuel');
@@ -24,6 +18,7 @@ test('create person', async (t) => {
 test('update person', async (t) => {
 	const result = await personsModule.update(1, 'katty');
 	t.is(result.person.name, 'katty');
+	t.is(result.affectedRows, 1);
 });
 
 test('delete person', async (t) => {
