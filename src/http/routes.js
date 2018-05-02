@@ -19,9 +19,9 @@ const routes = (server) => {
 	});
 
 	server.post('/persons', (req, resp, next) => {
-		const { name } = req.params;
+		const { name, email, password } = req.params;
 
-		db.persons().save(name)
+		db.persons().save(name, email, password)
 			.then((data) => {
 				resp.send(data);
 				next();

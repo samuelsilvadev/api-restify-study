@@ -5,7 +5,7 @@ const personsModule = deps => (
 			const { connection, errorHandler } = deps;
 
 			return new Promise((resolve, reject) => {
-				connection.query('SELECT * FROM persons;', (error, results) => {
+				connection.query('SELECT personID, personName, personEmail FROM persons;', (error, results) => {
 					if (error) {
 						errorHandler(
 							error,
@@ -19,7 +19,7 @@ const personsModule = deps => (
 				});
 			});
 		},
-		save: (name) => {
+		save: (name, email = '', password = '') => {
 			const { connection, errorHandler } = deps;
 
 			return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ const personsModule = deps => (
 					return;
 				}
 
-				connection.query('INSERT INTO persons(personName) VALUES (?);', [name], (error, results) => {
+				connection.query('INSERT INTO persons(personName, personEmail, personPassword) VALUES (?, ?, ?);', [name, email, password], (error, results) => {
 					if (error) {
 						errorHandler(
 							error,
@@ -38,7 +38,7 @@ const personsModule = deps => (
 						return;
 					}
 
-					resolve({ person: { name, personID: results.insertId } });
+					resolve({ person: { name, email, personID: results.insertId } });
 				});
 			});
 		},
