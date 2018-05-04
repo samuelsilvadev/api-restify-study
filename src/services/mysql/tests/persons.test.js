@@ -39,6 +39,8 @@ test('select 1 persons', async (t) => {
 });
 
 test('create person with empty name', async (t) => {
-	const result = await t.throws(personsModule.save());
+	const promise = personsModule.save();
+	const result = await t.throws(promise);
+
 	t.is(result.message, 'name is a required Parameter');
 });

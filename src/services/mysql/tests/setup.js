@@ -9,9 +9,9 @@ const connection = mysqlServer.createConnection({
 });
 
 const errorHandler = (error, msg, rejectFunction) => {
-	rejectFunction(error);
+	console.error(error);
+	rejectFunction({ error: msg });
 };
-
 
 module.exports = {
 	connection,

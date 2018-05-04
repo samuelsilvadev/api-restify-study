@@ -1,10 +1,9 @@
-
+const sha1 = require('sha1');
 const personsModule = deps => (
 	({
 		all: () => {
-			const { connection, errorHandler } = deps;
-
 			return new Promise((resolve, reject) => {
+				const { connection, errorHandler } = deps;
 				connection.query('SELECT personID, personName, personEmail FROM persons;', (error, results) => {
 					if (error) {
 						errorHandler(
@@ -20,15 +19,14 @@ const personsModule = deps => (
 			});
 		},
 		save: (name, email = '', password = '') => {
-			const { connection, errorHandler } = deps;
-
 			return new Promise((resolve, reject) => {
+				const { connection, errorHandler } = deps;
 				if (!name) {
-					errorHandler(new Error('name is a required Parameter'), 'name is a required Parameter', reject);
+					reject(new Error('name is a required Parameter'));
 					return;
 				}
 
-				connection.query('INSERT INTO persons(personName, personEmail, personPassword) VALUES (?, ?, ?);', [name, email, password], (error, results) => {
+				connection.query('INSERT INTO persons(personName, personEmail, personPassword) VALUES (?, ?, ?);', [name, email, sha1(password)], (error, results) => {
 					if (error) {
 						errorHandler(
 							error,
@@ -43,9 +41,8 @@ const personsModule = deps => (
 			});
 		},
 		update: (id, name) => {
-			const { connection, errorHandler } = deps;
-
 			return new Promise((resolve, reject) => {
+				const { connection, errorHandler } = deps;
 				connection.query('UPDATE persons SET personName = ? WHERE personID = ?;', [name, id], (error, results) => {
 					if (error || !results.affectedRows) {
 						errorHandler(
@@ -61,9 +58,8 @@ const personsModule = deps => (
 			});
 		},
 		del: (id) => {
-			const { connection, errorHandler } = deps;
-
 			return new Promise((resolve, reject) => {
+				const { connection, errorHandler } = deps;
 				connection.query('DELETE FROM persons WHERE personID = ?;', [id], (error, results) => {
 					if (error || !results.affectedRows) {
 						errorHandler(
