@@ -6,6 +6,21 @@ const routes = (server) => {
 		next();
 	});
 
+	server.post('/auth', (req, resp, next) => {
+		const { email, password } = req.params;
+
+		db.auth().autenticate(email, password)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
+
+
 	server.get('/persons', (req, resp, next) => {
 		db.persons().all()
 			.then((data) => {
