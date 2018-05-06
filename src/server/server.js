@@ -4,10 +4,12 @@ const routes = require('./../http/routes');
 const cors = require('./../server/cors');
 const jwtMiddleware = require('./jwtMiddleware');
 
+const exclusionsRoutes = ['/auth'];
+
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser());
-server.use(jwtMiddleware());
+server.use(jwtMiddleware({ exclusions: exclusionsRoutes }));
 
 routes(server);
 
