@@ -13,9 +13,11 @@ const errorHandler = (error, msg, rejectFunction) => {
 };
 
 const personsModule = require('./persons')({ connection, errorHandler });
+const carsModule = require('./cars')({ connection, errorHandler });
 const authModule = require('./auth')({ connection, errorHandler });
 
 module.exports = {
 	persons: () => personsModule,
+	cars: () => carsModule,
 	auth: () => authModule,
 };

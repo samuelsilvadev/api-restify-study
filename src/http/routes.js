@@ -74,6 +74,62 @@ const routes = (server) => {
 				next();
 			});
 	});
+
+	server.get('/cars', (req, resp, next) => {
+		db.cars().all()
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
+
+	server.post('/cars', (req, resp, next) => {
+		const { model, year, color } = req.params;
+
+		db.cars().save(model, year, color)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
+
+	server.put('/cars', (req, resp, next) => {
+		const {
+			model, year, color, id,
+		} = req.params;
+
+		db.cars().update(id, model, year, color)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
+
+	server.del('/cars', (req, resp, next) => {
+		const { id } = req.params;
+
+		db.cars().del(id)
+			.then((data) => {
+				resp.send(data);
+				next();
+			})
+			.catch((err) => {
+				resp.send(err);
+				next();
+			});
+	});
 };
 
 module.exports = routes;
