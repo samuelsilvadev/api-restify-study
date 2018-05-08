@@ -11,16 +11,14 @@ const jwtMiddleware = (exclusionRoutes) => {
 				});
 				return;
 			}
-
-			await jwt.verify(token, process.env.JWT_TOKEN_SECRET, (error, decoded) => {
-				if (error) {
-					resp.send(403, {
-						error: 'Fail to autenticate with this token',
-					});
-				} else {
-					req.decoded = decoded;
-				}
-			});
+			try {
+				req.decoded = await jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+			} catch (error) {
+				resp.send(403, {
+					error: 'Fail to autenticate with this token',
+				});
+				return;
+			}
 		}
 		next();
 	};
